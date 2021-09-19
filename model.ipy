@@ -1,0 +1,68 @@
+import numpy as np
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn import svm
+from sklearn.metrics import accuracy_score
+
+diabetes_dataset = pd.read_csv('Diabetes.csv') 
+
+
+scaler = StandardScaler()
+
+X = diabetes_dataset.drop(columns = 'Outcome', axis=1)
+Y = diabetes_dataset['Outcome']
+
+scaler.fit(X)
+
+StandardScaler(copy=True, with_mean=True, with_std=True)
+standardized_data = scaler.transform(X)
+
+X = standardized_data
+Y = diabetes_dataset['Outcome']
+
+X_train, X_test, Y_train, Y_test = train_test_split(X,Y, test_size = 0.2, stratify=Y, random_state=2)
+
+classifier = svm.SVC(kernel='linear')
+classifier.fit(X_train, Y_train)
+
+
+
+X_train_prediction = classifier.predict(X_train)
+training_data_accuracy = accuracy_score(X_train_prediction, Y_train)
+
+print('\n\nAccuracy score of the training data : ', training_data_accuracy*100, '%')
+
+X_test_prediction = classifier.predict(X_test)
+test_data_accuracy = accuracy_score(X_test_prediction, Y_test)
+
+print('Accuracy score of the test data : ', test_data_accuracy*100, '%')
+
+
+preg = input("\nEnter Pregnancies: ")
+glucose = input("Enter Glucose level: ")
+bp = input("Enter Blood Pressure (DIA): ")
+st = input("Enter Skin Thickness: ")
+insulin = input("Enter Insulin intake level: ")
+bmi = input("Enter BMI: ")
+dpf = input("Enter Diabetes Pedigree function(B/w 0-3): ")
+age = input("Enter age: ")
+
+input_data = (preg, glucose, bp ,st , insulin, bmi, dpf, age)
+
+# changing the input_data to numpy array
+input_data_as_numpy_array = np.asarray(input_data)
+
+# reshape the array as we are predicting for one instance
+input_data_reshaped = input_data_as_numpy_array.reshape(1,-1)
+
+# standardize the input data
+std_data = scaler.transform(input_data_reshaped)
+
+prediction = classifier.predict(std_data)
+print(prediction)
+
+if (prediction[0] == 0):
+  print('The Patient is not diabetic')
+else:
+  print('The Patient is diabetic')
