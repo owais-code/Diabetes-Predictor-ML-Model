@@ -5,4 +5,4 @@ The repositary contains the following:-
 1) model.ipy - contains the ML model made using Python and python libraries.
 2) Diabetes.csv - contains the excel DataSheet
 3) Diabetes.html - Pandas profiled report of DataSheet
-4) Complete Detailed Docx 
+4) Presentation File - Complete Detailed Docx. 
